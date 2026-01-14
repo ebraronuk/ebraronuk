@@ -4,8 +4,8 @@ Welcome to my GitHub profile.
 I’m an Electrical and Electronics Engineer working at the intersection of **business analysis, configuration management, and product development**, with a strong focus on **engineering systems and agent-based AI**.
 
 🌟 **What I Work On**
-- 📊 Business Analysis & Requirements Engineering (PRD / FRD / use cases)
 - 🧩 Configuration Management & lifecycle consistency
+- 📊 Business Analysis & Requirements Engineering (PRD / FRD / use cases)
 - 🏗️ Product & Technical Architecture
 - 🤖 Agent-based AI workflows and system orchestration
 
