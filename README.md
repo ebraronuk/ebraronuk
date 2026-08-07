@@ -92,10 +92,4 @@ Most of my professional multi-agent/AI work sits in private company repositories
 
 ---
 
-## 🧭 Mindset
-
-> I build scalable, traceable, agentic AI systems where business clarity meets engineering discipline from embedded sensors to multi-agent products serving real users.
-
----
-
 <p align="center"><i>İstanbul, Türkiye</i></p>
