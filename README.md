@@ -32,17 +32,48 @@ One thing I'm glad I got right. When wrong answers started showing up in product
 
 `React Native · TypeScript · Node.js · FastAPI · LangGraph · Supabase · pgvector · Redis · Docker`
 
-[App Store](#) · [Google Play](#) · [asisimo.com](https://asisimo.com)
+[asisimo.com](https://asisimo.com) — live on the App Store and Google Play
 
-### Two public repos
+### Three public repos
 
 Most of what I've built sits in private company repos. These two are public on purpose, so there's something to point at.
 
 **[multi-agent-banking-rag](https://github.com/ebraronuk/multi-agent-banking-rag)** — the architecture I work with every day, written from scratch: LangGraph orchestration, hybrid RAG (vector + BM25), FastMCP tool-calling, rule-based NER and intent recognition, a policy guardrail layer.
-`LangGraph · FastMCP · FastAPI · Chroma · Docker · Kubernetes`
+`LangGraph · FastMCP · FastAPI · Chroma · pgvector · Docker · CI/CD`
+
+**[ad-applicability](https://github.com/ebraronuk/ad-applicability)** — an FAA airworthiness directive says which aircraft it binds in a paragraph of prose, not a list. This reads that paragraph and answers for every aircraft in a fleet, and names what it cannot determine instead of guessing. Unknowns are a first-class value, so a missing fact can widen an answer to undetermined but can never flip a definite yes into a definite no — that is a property test, not a comment.
+`TypeScript · Kleene three-valued logic · fast-check · PostgreSQL · Next.js`
 
 **[talep-onay-sistemi](https://github.com/ebraronuk/talep-onay-sistemi)** — backend code written with nobody rushing me. The layer rules are ArchUnit tests instead of a paragraph in a document, and they caught two real circular dependencies the day I added them. The audit trail is immutable in the database, not just in Java. Every performance number in the README is measured, not claimed.
 `Spring Boot · Java 21 · PostgreSQL · Spring Security · Flyway · Testcontainers`
+
+### Three times I was wrong, measured it, and said so
+
+I write code with AI agents every day. The reason that works is not trust, it is that I
+go back and check. These are the three times checking changed the answer, and all three
+numbers are in the repos.
+
+**My parser looked 99% right and was half wrong.** `ad-applicability` extracted a
+constraint from 194 of 196 real directives, and I nearly shipped that number as if it
+meant the constraints were correct. A parser that builds the wrong expression tree scores
+just as well. So I hand-audited a 20-clause sample against the source text: **10 of 20
+were wrong.** Three systematic defects came out of it. After fixing them the same audit
+gives **18 of 20**, and both numbers are in the README, because the first one is the
+reason I believe the second.
+
+**My own eval set was lying to me.** The intent classifier in `multi-agent-banking-rag`
+scored **100%** on my first eval set. The set was full sentences with correct punctuation,
+and nobody writes to a chatbot that way. I rebuilt it from real user language: lowercase,
+no Turkish characters, typos, one-word requests, angry tone. The same system scored
+**57.1%**. Two root causes: users who skip Turkish diacritics matched no keyword at all
+(that class went **22% → 100%** with `ascii_fold()`), and my keywords were inflected forms
+in an agglutinative language. Final score **80%** — a real number instead of a flattering one.
+
+**I turned down the higher score.** A bare `kartım` stem pushed that score to **85.7%**,
+and I reverted it. It had started reading "when can I block my card, what is your policy?"
+as a card transaction and broke a regression test that was protecting a real bug. I took
+**23 points instead of 28**, and the reason is a comment in the code, not a note I kept to
+myself.
 
 <details>
 <summary><b>🛰️ Earlier work: aerospace, defense &amp; tooling</b></summary>
