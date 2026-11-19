@@ -12,7 +12,7 @@ Full-Stack & AI Engineer. I build the AI layer and the services underneath it, a
 - **Writing code with AI agents, and checking it** — Claude Code, Codex, Cursor. A generated service can pass its tests and still put a query in the wrong layer
 - **The unglamorous half** — REST surfaces, database structures, service boundaries, Docker, CI/CD, store releases
 
-Most recently [Asisimo](https://asisimo.com), an AI assistant in Turkish, live on iOS and Android: 20+ specialist agents behind an orchestrator, close to 70 function definitions in the tool-calling loop. It arrived as an idea with no spec. The requirement work, the architecture and the stack calls were mine.
+Most recently [an AI family assistant in Turkish](https://apps.apple.com/tr/app/asisimo-aile-destek-asistan%C4%B1/id6757652820?l=tr), live on iOS and Android: 20+ specialist agents behind an orchestrator, close to 70 function definitions in the tool-calling loop. It arrived as an idea with no spec. The requirement work, the architecture and the stack calls were mine.
 
 ### Public repos
 
