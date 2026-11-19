@@ -1,95 +1,29 @@
 ## Hi, I'm Ebrar
 
-Full-Stack & AI Engineer. My degree is in Electrical & Electronics Engineering.
+Full-Stack & AI Engineer. I build the AI layer and the services underneath it, and I carry both.
 
-The part of this job I like most is when someone describes a problem out loud and it isn't written down anywhere yet. I take it from there: work out what it actually needs to do, build it, and stay with it until it ships.
+**What I'm after:** products where the agent behaviour and the API beneath it belong to the same engineer.
 
 ### What I do
 
-**Figure out what needs building.** Sit with the people who need the thing, turn it into flows and a schema, decide what gets built in which week.
+- **Multi-agent systems in production** — LangGraph, intent routing, tool-calling loops, guardrails that keep agents inside their scope
+- **RAG and retrieval** — pgvector, Chroma, hybrid retrieval, and working out *why* a live answer came back wrong, which is usually not the model
+- **Evaluation** — eval sets, LLM-as-judge, regression runs. Without them you are guessing whether a change helped
+- **Writing code with AI agents, and checking it** — Claude Code, Codex, Cursor. A generated service can pass its tests and still put a query in the wrong layer
+- **The unglamorous half** — REST surfaces, database structures, service boundaries, Docker, CI/CD, store releases
 
-**Build with AI agents, and check their work.** Claude Code, Codex and Cursor are how I write code now. The part that still needs an engineer is reading what comes back. A generated service can pass its tests and still put a query in the wrong layer.
+Most recently [Asisimo](https://asisimo.com), an AI assistant in Turkish, live on iOS and Android: 20+ specialist agents behind an orchestrator, close to 70 function definitions in the tool-calling loop. It arrived as an idea with no spec. The requirement work, the architecture and the stack calls were mine.
 
-**Multi-agent systems in production.** LangGraph and LangChain: a router that reads intent, specialist agents behind it, tool-calling loops, shared memory, guardrails that keep agents inside their scope.
+### Public repos
 
-**RAG and retrieval.** Embeddings, vector stores (pgvector, Chroma), hybrid retrieval, reranking. And the part people skip: working out *why* a live answer came back wrong, which is usually not the model.
+**[multi-agent-banking-rag](https://github.com/ebraronuk/multi-agent-banking-rag)** — the architecture I work with every day, written from scratch: LangGraph orchestration, hybrid RAG, FastMCP tool-calling, a rule-based guardrail layer.
 
-**Evaluation.** Eval sets, LLM-as-judge, regression runs, Langfuse. Without them you're guessing whether a change helped, and I'd rather know.
+**[ad-applicability](https://github.com/ebraronuk/ad-applicability)** — an FAA directive says which aircraft it binds in prose, not a list. This reads that paragraph and answers for a whole fleet, naming what it cannot determine instead of guessing. A missing fact can widen an answer to undetermined but never flip a definite yes into a no, and that is a property test rather than a comment.
 
-**The unglamorous half.** REST surfaces, database structures, service boundaries, Docker, CI/CD, store releases.
+**[talep-onay-sistemi](https://github.com/ebraronuk/talep-onay-sistemi)** — Spring Boot 3.5 and Java 21. The layer rules are ArchUnit tests instead of a paragraph in a document, and the audit trail is immutable in the database rather than in Java.
 
-**Configuration management.** PLM and ERP traceability, change control. This is where I started, in aerospace.
-
-### Asisimo
-
-An AI family assistant in Turkish, live on iOS and Android. Small team, and I was on it from the first day.
-
-It came to us as an idea. No spec, nothing written down. I did the requirement and process work, made the architecture and stack calls, then built it.
-
-Underneath: 21 specialist agents behind a supervisor and an orchestrator on LangGraph, 68 function definitions in the tool-calling loop, three-tier intent detection, guardrails on every agent.
-
-One thing I'm glad I got right. When wrong answers started showing up in production, the instinct is to blame the model. It wasn't the model, it was retrieval. I rewrote that layer and put eval sets and regression runs around it, so the next time I'd know instead of guessing.
-
-`React Native · TypeScript · Node.js · FastAPI · LangGraph · Supabase · pgvector · Redis · Docker`
-
-[asisimo.com](https://asisimo.com) — live on the App Store and Google Play
-
-### Three public repos
-
-Most of what I've built sits in private company repos. These two are public on purpose, so there's something to point at.
-
-**[multi-agent-banking-rag](https://github.com/ebraronuk/multi-agent-banking-rag)** — the architecture I work with every day, written from scratch: LangGraph orchestration, hybrid RAG (vector + BM25), FastMCP tool-calling, rule-based NER and intent recognition, a policy guardrail layer.
-`LangGraph · FastMCP · FastAPI · Chroma · pgvector · Docker · CI/CD`
-
-**[ad-applicability](https://github.com/ebraronuk/ad-applicability)** — an FAA airworthiness directive says which aircraft it binds in a paragraph of prose, not a list. This reads that paragraph and answers for every aircraft in a fleet, and names what it cannot determine instead of guessing. Unknowns are a first-class value, so a missing fact can widen an answer to undetermined but can never flip a definite yes into a definite no — that is a property test, not a comment.
-`TypeScript · Kleene three-valued logic · fast-check · PostgreSQL · Next.js`
-
-**[talep-onay-sistemi](https://github.com/ebraronuk/talep-onay-sistemi)** — backend code written with nobody rushing me. The layer rules are ArchUnit tests instead of a paragraph in a document, and they caught two real circular dependencies the day I added them. The audit trail is immutable in the database, not just in Java. Every performance number in the README is measured, not claimed.
-`Spring Boot · Java 21 · PostgreSQL · Spring Security · Flyway · Testcontainers`
-
-### Three times I was wrong, measured it, and said so
-
-I write code with AI agents every day. The reason that works is not trust, it is that I
-go back and check. These are the three times checking changed the answer, and all three
-numbers are in the repos.
-
-**My parser looked 99% right and was half wrong.** `ad-applicability` extracted a
-constraint from 194 of 196 real directives, and I nearly shipped that number as if it
-meant the constraints were correct. A parser that builds the wrong expression tree scores
-just as well. So I hand-audited a 20-clause sample against the source text: **10 of 20
-were wrong.** Three systematic defects came out of it. After fixing them the same audit
-gives **18 of 20**, and both numbers are in the README, because the first one is the
-reason I believe the second.
-
-**My own eval set was lying to me.** The intent classifier in `multi-agent-banking-rag`
-scored **100%** on my first eval set. The set was full sentences with correct punctuation,
-and nobody writes to a chatbot that way. I rebuilt it from real user language: lowercase,
-no Turkish characters, typos, one-word requests, angry tone. The same system scored
-**57.1%**. Two root causes: users who skip Turkish diacritics matched no keyword at all
-(that class went **22% → 100%** with `ascii_fold()`), and my keywords were inflected forms
-in an agglutinative language. Final score **80%** — a real number instead of a flattering one.
-
-**I turned down the higher score.** A bare `kartım` stem pushed that score to **85.7%**,
-and I reverted it. It had started reading "when can I block my card, what is your policy?"
-as a card transaction and broke a regression test that was protecting a real bug. I took
-**23 points instead of 28**, and the reason is a comment in the code, not a note I kept to
-myself.
-
-<details>
-<summary><b>🛰️ Earlier work: aerospace, defense &amp; tooling</b></summary>
-
-<br>
-
-| Project | What it does | Stack |
-|---|---|---|
-| 💬 **[nextreach-chatbot](https://github.com/ebraronuk/nextreach-chatbot)** | B2B SaaS lead-qualification chatbot + admin dashboard, built in a 6-hour timed challenge | Next.js · Supabase · Gemini |
-| 🛰️ **[embedded-telemetry-toolkit](https://github.com/ebraronuk/embedded-telemetry-toolkit)** | UAV telemetry simulator, parser and anomaly analyzer with a Streamlit GUI | Python · pytest · Streamlit · CI |
-| 🧭 **[imu-gps-magnetometer-analyzer](https://github.com/ebraronuk/imu-gps-magnetometer-analyzer)** | Avionics sensor toolkit: hard/soft-iron calibration, FFT, complementary filtering | Python · NumPy/SciPy · PyQt5 · Plotly |
-| 🏭 **[plm-config-migration-tool](https://github.com/ebraronuk/plm-config-migration-tool)** | Excel to PLM/ERP BOM migration with validation, normalization and traceability | Python · YAML · Excel · SQL |
-| ✈️ **[engine-performance-analyzer](https://github.com/ebraronuk/engine-performance-analyzer)** | Aircraft engine performance and degradation-trend analysis | Python · MATLAB |
-
-</details>
+I check my own work and publish both numbers: `ad-applicability` extracted a constraint from 194 of 196 real directives, but a hand audit of 20 clauses found **10 of them wrong**. Three systematic defects later the same audit gives **18 of 20**.
 
 ---
 
-İstanbul, Türkiye · [ebraronuk.com](https://ebraronuk.com) · [linkedin.com/in/ebraronuk](https://linkedin.com/in/ebraronuk)
+[ebraronuk.com](https://ebraronuk.com) · [linkedin.com/in/ebraronuk](https://linkedin.com/in/ebraronuk) · İstanbul, Türkiye
